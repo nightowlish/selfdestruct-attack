@@ -54,7 +54,7 @@ contract VulnerableGame {
             revert VulnerableGame__OnlyWinnerCanWithdraw();
         }
 
-        (bool success, ) = msg.sender.call{value: address(this).balance}("");
+        (bool success,) = msg.sender.call{value: address(this).balance}("");
         if (!success) {
             revert VulnerableGame__WithdrawFailed();
         }

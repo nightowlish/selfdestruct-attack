@@ -24,11 +24,7 @@ contract VulnerableGameTest is Test {
         vulnerableGame.deposit{value: 1 ether}();
 
         // Verify contract balance
-        assertEq(
-            address(vulnerableGame).balance,
-            1 ether,
-            "Contract balance should be 1 ether"
-        );
+        assertEq(address(vulnerableGame).balance, 1 ether, "Contract balance should be 1 ether");
     }
 
     function testDepositInvalidAmount() public {
@@ -50,18 +46,10 @@ contract VulnerableGameTest is Test {
         }
 
         // Check that the contract balance is 10 ether
-        assertEq(
-            address(vulnerableGame).balance,
-            10 ether,
-            "Contract balance should be 10 ether"
-        );
+        assertEq(address(vulnerableGame).balance, 10 ether, "Contract balance should be 10 ether");
 
         // Check that Player 1 is the winner
-        assertEq(
-            vulnerableGame.winner(),
-            player1,
-            "Player 1 should be the winner"
-        );
+        assertEq(vulnerableGame.winner(), player1, "Player 1 should be the winner");
     }
 
     function testRevertDepositsAfterWinnerIsFound() public {
@@ -75,9 +63,7 @@ contract VulnerableGameTest is Test {
         // Check that deposits are not allowed after a winner is found
         vm.deal(player2, 1 ether); // Give Player 2 1 ether
         vm.prank(player2); // Simulate Player 2 as the caller
-        vm.expectRevert(
-            VulnerableGame.VulnerableGame__WinnerMustWithdraw.selector
-        );
+        vm.expectRevert(VulnerableGame.VulnerableGame__WinnerMustWithdraw.selector);
         vulnerableGame.deposit{value: 1 ether}();
     }
 }
