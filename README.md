@@ -1,66 +1,51 @@
-## Foundry
+# VulnerableGame - Demonstrating a Smart Contract Exploit
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This repository showcases a vulnerability in a Solidity smart contract, `VulnerableGame`, and demonstrates how it can be exploited using a `SelfDestructExploit` contract.
 
-Foundry consists of:
+## Overview
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+- **VulnerableGame**: A game where players deposit 1 ether. The first player to make the contract balance reach 10 ether wins and can withdraw all funds. The game is then reset and can start over.
+- **SelfDestructExploit**: A malicious contract that uses `selfdestruct` to forcibly send ether to the `VulnerableGame` contract, bypassing its logic, making the game unplayable and the funds unretrievable.
 
-## Documentation
+## Problem
 
-https://book.getfoundry.sh/
+The `VulnerableGame` contract is vulnerable because:
+1. It relies on `address(this).balance` for game logic.
+2. It doesn’t prevent nor handle unexpected ether transfers.
 
-## Usage
+### Exploit
 
-### Build
+The `SelfDestructExploit` contract can forcibly send ether using `selfdestruct`, causing:
+- The game to reach the target balance unexpectedly.
+- Potentially locking or misdirecting funds.
 
-```shell
-$ forge build
-```
+---
 
-### Test
+## How to Test the Vulnerability
 
-```shell
-$ forge test
-```
+### Prerequisites
 
-### Format
+- [Foundry](https://book.getfoundry.sh/)
+- Solidity compiler (v0.8.x).
 
-```shell
-$ forge fmt
-```
+### Steps
 
-### Gas Snapshots
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/nightowlish/selfdestruct-attack.git
+   cd selfdestruct-attack
+   ```
+2. **Compile the Contracts**:
+   Use Foundry to compile the smart contracts:
+   ```bash
+   forge install
+   forge build
+   ```
+3. **Run the Exploit**:
+    
+    Call `triggerSelfDestruct` from `SelfDestructExploit`, targeting the address of the deployed `VulnerableGame` contract.
 
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+4. **Observe the Results**:
+    
+    Check the balance of the `VulnerableGame` contract.
+    Try to interact with the game by calling `deposit` or `withdraw`. The game logic is broken, rendering the contract unplayable and funds locked.

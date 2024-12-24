@@ -60,5 +60,6 @@ contract VulnerableGame {
         }
 
         target = 0;
+        winner = address(0);
     }
 }
