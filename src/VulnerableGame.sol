@@ -50,7 +50,7 @@ contract VulnerableGame {
      * After the winner withdraws, the total balance is reset to 0.
      */
     function withdraw() public {
-        if (msg.sender == winner) {
+        if (msg.sender != winner) {
             revert VulnerableGame__OnlyWinnerCanWithdraw();
         }
 
