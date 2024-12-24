@@ -43,9 +43,6 @@ The `SelfDestructExploit` contract can forcibly send ether using `selfdestruct`,
    ```
 3. **Run the Exploit**:
     
-    Call `triggerSelfDestruct` from `SelfDestructExploit`, targeting the address of the deployed `VulnerableGame` contract.
-
-4. **Observe the Results**:
-    
-    Check the balance of the `VulnerableGame` contract.
-    Try to interact with the game by calling `deposit` or `withdraw`. The game logic is broken, rendering the contract unplayable and funds locked.
+   ```bash
+   forge test --match-test testExploit -vvv
+   ```
